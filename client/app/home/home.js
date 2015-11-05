@@ -1,6 +1,6 @@
 // Unbalanced ()) Greenfield Project
 // =============================================================================
-
+(function() {
 'use strict';
 
 angular.module('myApp.home', ['ngRoute'])
@@ -71,7 +71,7 @@ angular.module('myApp.home', ['ngRoute'])
     geocoder.geocode(    // get LatLng for given address
       {'address': locationData},
       function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
+        if (status === google.maps.GeocoderStatus.OK) {
           getMap(results[0].geometry.location, 14);  // redraw map with new location
           drawUserMarker(results[0].geometry.location);  // draw a new marker in the center of the map
           $scope.clickedPosition = results[0].geometry.location;  // searches will now be around the new marker
@@ -83,7 +83,7 @@ angular.module('myApp.home', ['ngRoute'])
 
 // CREATE A PERSISTENT USER MARKER
   var drawUserMarker = function(position) {
-    if (position == undefined) {
+    if (position === undefined) {
       position = $scope.map.getCenter();
     }
 
@@ -150,7 +150,7 @@ angular.module('myApp.home', ['ngRoute'])
       infoWindow.setContent(browserHasGeolocation ?
         'Error: The Geolocation service failed.' :
         'Error: Your browser doesn\'t support geolocation.');
-    };
+    }
   };
 
 // CREATE MARKERS FOR SITES
@@ -207,10 +207,10 @@ angular.module('myApp.home', ['ngRoute'])
     $scope.currentRankByFlag = rankByFlag;
     $scope.selectedSport = sport;
     
-    if (keyword != undefined) { // if keyword is passed in, save it
+    if (keyword !== undefined) { // if keyword is passed in, save it
       $scope.currentKeyword = keyword;
     }
-    if ($scope.clickedPosition == undefined) {  // if no flag set, search around center of map
+    if ($scope.clickedPosition === undefined) {  // if no flag set, search around center of map
       searchLocation = $scope.map.getCenter();
     } else {  // otherwise search around flag
       searchLocation = $scope.clickedPosition;
@@ -238,7 +238,7 @@ angular.module('myApp.home', ['ngRoute'])
     service.nearbySearch(request, nearbySearchCallback);  // perform the search with given parameters
 
     function nearbySearchCallback(results, status) {  // this callback must handle the results object and the PlacesServiceStatus response
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
         $scope.sitesResults = results; // populate site list with results
         $scope.$apply();  // force update the $scope
         
@@ -279,3 +279,4 @@ angular.module('myApp.home', ['ngRoute'])
 
 }]);
 
+}());
