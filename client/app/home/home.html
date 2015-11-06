@@ -100,7 +100,10 @@
   function initMap() {
     var scope = $('#map').scope();
     scope.userfind();
+    scope.directionDisplay();
     google.maps.event.addDomListener(window, 'load', initialize);
+
+
   }
 
   // Google Address Autocomplete

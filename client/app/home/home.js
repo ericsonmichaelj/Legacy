@@ -115,7 +115,10 @@ angular.module('myApp.home', ['ngRoute'])
         $scope.clickedPosition = event.latLng;
     });
   };
-
+  $scope.directionDisplay = function(){   
+    window.directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsDisplay.setMap($scope.map)
+  }
 // GEOLOCATE USER'S POSITION
   $scope.userfind = function() {
     getMap(defaultLocation, 12);  // draw map with default location
@@ -192,20 +195,19 @@ angular.module('myApp.home', ['ngRoute'])
     }
 
     var iconMarkerImg = sportIcons[keyword];  // see the sportIcons object at top
-    
+
+
+
     var marker = new google.maps.Marker({  // draw the marker on the map
       map: $scope.map,
       position: place.geometry.location,
       animation: google.maps.Animation.DROP,
       icon: iconMarkerImg
     });
-
     marker.addListener('click', function() { // add event listener for each marker
       $('*[data-placeId] .sitename').css("font-weight", "normal");  // make text for list item bold
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
       var directionsService = new google.maps.DirectionsService;
-      var directionsDisplay = new google.maps.DirectionsRenderer;
-      directionsDisplay.setMap($scope.map)
       directionsService.route({
         origin: $scope.userPosition,
         destination: destination,
