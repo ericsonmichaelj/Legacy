@@ -171,7 +171,7 @@ angular.module('myApp.home', ['ngRoute'])
     service.getDistanceMatrix({
       origins : [origin],
       destinations : [destination],
-       travelMode: google.maps.TravelMode.DRIVING
+      travelMode: google.maps.TravelMode.DRIVING
     },DistanceMatrixServiceCallback)
     function DistanceMatrixServiceCallback(response,status){
       $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
@@ -203,9 +203,24 @@ angular.module('myApp.home', ['ngRoute'])
     marker.addListener('click', function() { // add event listener for each marker
       $('*[data-placeId] .sitename').css("font-weight", "normal");  // make text for list item bold
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
+      var directionsService = new google.maps.DirectionsService;
+      var directionsDisplay = new google.maps.DirectionsRenderer;
+      directionsDisplay.setMap($scope.map)
+      directionsService.route({
+        origin: $scope.userPosition,
+        destination: destination,
+        travelMode: google.maps.TravelMode.DRIVING
 
+      },function(response,status){
+         if (status === google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response)
+        }else {
+          console.log("Direction request failed")
+        }
+      })
       infowindow.setContent('<div class="infowindow-name">' + placeName + '</div><div class="infowindow-open ' + placeOpenNowClass + '">' + placeOpenNow + '</div><div class="infowindow-vicinity">' + placeVicinity + '</div');
       infowindow.open($scope.map, this);  // infowindow popup
+
     });
 
     markers.push(marker); // add each marker to markers array
