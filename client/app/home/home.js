@@ -155,7 +155,7 @@ angular.module('myApp.home', ['ngRoute'])
   };
 
 // CREATE MARKERS FOR SITES
-  $scope.createMarker = function(place, keyword) {
+  $scope.createMarker = function(place, keyword,element) {
     var placeLoc = place.geometry.location;
     var placeLng = placeLoc.lng();
     var placeLat = placeLoc.lat();
@@ -164,7 +164,7 @@ angular.module('myApp.home', ['ngRoute'])
     var placeOpenNow;
     var placeOpenNowClass;
 
-    //FIND THE DISTANCE!
+    //THIS STARTS THE INPUT NECESSARY TO FIND THE DISTANCE!
     var destination = {lat:placeLat,lng:placeLng};
     var origin = $scope.userPosition;
     var service = new google.maps.DistanceMatrixService();
@@ -174,7 +174,8 @@ angular.module('myApp.home', ['ngRoute'])
        travelMode: google.maps.TravelMode.DRIVING
     },DistanceMatrixServiceCallback)
     function DistanceMatrixServiceCallback(response,status){
-      console.log(response.rows[0].elements[0].distance.text,"This is the response");
+      $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
+      $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
     } 
 
 
@@ -264,14 +265,14 @@ angular.module('myApp.home', ['ngRoute'])
 
         $scope.$apply();  // force update the $scope
         
-        _.each(results, function(place) {  // create markers for results
+        _.each(results, function(place,element) {  // create markers for results
           $http.post('/siteinfo', place)  // post site info to server
             .then(function successCallback(response) {
               place.checkins = response.data.checkins;
             }, function errorCallback(response) {
               console.error('database post error: ', error);
             });
-          $scope.createMarker(place, keyword);
+          $scope.createMarker(place,keyword,element);
         });
       }
     }
