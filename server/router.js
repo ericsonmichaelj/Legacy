@@ -42,8 +42,8 @@ router.get('/userauth', passport.authenticate('facebook', { failureRedirect: '/l
 
 passport.use( new FacebookStrategy({  // request fields from facebook
   profileFields: ['id', 'displayName', 'photos'],
-  clientID: '1664576320455716',
-  clientSecret: '018421cdfca61a8d10f6beacf9dabab4',
+  clientID: '1511033495856329',
+  clientSecret: '1cc7a259818771828b4ecacdd766235a',
   callbackURL: '/auth/facebook/callback',
   enableProof: false
   },
