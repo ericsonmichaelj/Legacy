@@ -14,7 +14,7 @@ app.factory('socket', function (socketFactory) {
 
 app.controller('MainCtrl', function ($scope, $mdDialog, socket, $http) {
     $scope.messages = [];
-    $scope.room = "i";
+    $scope.room = "default";
     $scope.username = "sonny"
 
     
