@@ -84,7 +84,7 @@ console.log('Unbalanced magic is happening on port ' + port);
 
 //listen for the connection
 io.on('connection', function(socket){
-   console.log('hello, socket is connected')
+   console.log('why hello there, socket.io')
 
   var defaultSport = 'general';
   var rooms = ["general","another"]

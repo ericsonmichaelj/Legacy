@@ -1,7 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io'])
+angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io', 'chat'])
 
 
 
@@ -12,17 +12,11 @@ angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons',
   });
 }])
 
-.controller('homeController', ['$scope', '$log', '$http',  function($scope, $log, $http, $mdDialog, socketFactory) {
-
-
-
-socketFactory.on('setup', function (data) {
-        console.log('here')
-        var rooms = data.rooms;
-        console.log('the rooms',rooms);})
+.controller('homeController', ['$scope', '$log', '$http',  function($scope, $log, $http, $mdDialog, socket) {
 
 
 // $SCOPE VARIABLES
+  
   $scope.map;
   $scope.userPosition;
   $scope.sitesResults;
@@ -30,6 +24,8 @@ socketFactory.on('setup', function (data) {
   $scope.clickedPosition;
   $scope.currentRankByFlag;
   $scope.checkins;
+
+
 
   $scope.sports = {
     'Basketball': 'Basketball Court',

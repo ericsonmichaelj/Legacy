@@ -17,7 +17,22 @@
     <script src="chats.js"></script>
 </head>
 <body ng-app="chat" ng-controller="MainCtrl" ng-init="usernameModal()">
-    <md-content>
+      <md-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-icon-button" aria-label="Settings">
+              
+                </md-button>
+                <h2>
+          <span>Game Chat</span>
+        </h2>
+                <span flex></span>
+
+                <md-select placeholder="Rooms"  ng-model="room" ng-change="changeRoom(room)">
+                    <md-option ng-repeat="r in rooms" value="{{r}}">{{r}}</md-option>
+                </md-select>
+            </div>
+        </md-toolbar>
         <section>
             <md-list>
                 <md-subheader class="md-primary header">Room: {{room}} <span align="right">Userame: {{username}} </span> </md-subheader>
@@ -27,6 +42,7 @@
                         <img ng-src="../assets/images/baseball.png" class="md-avatar" alt="User" />
                         <div class="md-list-item-text">
                             <h3>{{ m.username }}</h3>
+                             <h3>{{ m.room }}</h3>
                             <p>{{m.message}}</p>
                         </div>
                     </md-list-item>
@@ -43,7 +59,7 @@
                 <textarea ng-model="message" columns="1" md-maxlength="100" ng-enter="send(message)"></textarea>
 
             </md-input-container>
-            <md-button ng-click="send(message)"> Flat Button </md-button>
+            <md-button ng-click="send(message)"> Send message </md-button>
 
 
         </div>
