@@ -90,6 +90,7 @@ angular.module('myApp.home', ['ngRoute'])
       icon: userMarkerImage
     });
 
+
     userMarker.setMap($scope.map);  // set the new center marker
   };
 
@@ -100,6 +101,8 @@ angular.module('myApp.home', ['ngRoute'])
       zoom: zoomLevel,
       disableDoubleClickZoom: true
     });
+
+
 
     infowindow = new google.maps.InfoWindow();  // init infowindow
 
@@ -152,12 +155,30 @@ angular.module('myApp.home', ['ngRoute'])
   };
 
 // CREATE MARKERS FOR SITES
-  $scope.createMarker = function(place, keyword) {
+  $scope.createMarker = function(place, keyword,element) {
     var placeLoc = place.geometry.location;
+    var placeLng = placeLoc.lng();
+    var placeLat = placeLoc.lat();
     var placeVicinity = place.vicinity;
     var placeName = place.name;
     var placeOpenNow;
     var placeOpenNowClass;
+
+    //THIS STARTS THE INPUT NECESSARY TO FIND THE DISTANCE!
+    var destination = {lat:placeLat,lng:placeLng};
+    var origin = $scope.userPosition;
+    var service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix({
+      origins : [origin],
+      destinations : [destination],
+       travelMode: google.maps.TravelMode.DRIVING
+    },DistanceMatrixServiceCallback)
+    function DistanceMatrixServiceCallback(response,status){
+      $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
+      $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
+    } 
+
+
 
     if (place.opening_hours && place.opening_hours.open_now) {  // not all Places have opening_hours property, will error on variable assign if they don't
       placeOpenNow = 'Open to play right now!';
@@ -204,7 +225,7 @@ angular.module('myApp.home', ['ngRoute'])
 
     $scope.currentRankByFlag = rankByFlag;
     $scope.selectedSport = sport;
-    
+
     if (keyword !== undefined) { // if keyword is passed in, save it
       $scope.currentKeyword = keyword;
     }
@@ -236,18 +257,22 @@ angular.module('myApp.home', ['ngRoute'])
     service.nearbySearch(request, nearbySearchCallback);  // perform the search with given parameters
 
     function nearbySearchCallback(results, status) {  // this callback must handle the results object and the PlacesServiceStatus response
+
       if (status === google.maps.places.PlacesServiceStatus.OK) {
+
+        //
         $scope.sitesResults = results; // populate site list with results
+
         $scope.$apply();  // force update the $scope
         
-        _.each(results, function(place) {  // create markers for results
+        _.each(results, function(place,element) {  // create markers for results
           $http.post('/siteinfo', place)  // post site info to server
             .then(function successCallback(response) {
               place.checkins = response.data.checkins;
             }, function errorCallback(response) {
               console.error('database post error: ', error);
             });
-          $scope.createMarker(place, keyword);
+          $scope.createMarker(place,keyword,element);
         });
       }
     }
