@@ -5,7 +5,9 @@
     <div class="container-fluid">
       <div id="site-selection-nav">
         <ul class="nav navbar-nav">
+
         <li class="refresh-btn">
+
             <a class="btn btn-default" type="button" ng-click="populateList(currentKeyword, selectedSport,  currentRankByFlag)">
               <i class="fa fa-refresh"></i>
             </a>
@@ -83,6 +85,7 @@
             <span class="opening-info open-now" ng-show="{{elm.opening_hours.open_now}}">Open Now</span>
 
             <span class="opening-info close-now" ng-show="{{elm.opening_hours.open_now === false}}">Closed</span>
+
           </li>
         </ul>
       </div>
@@ -90,13 +93,28 @@
     </div>
 
   </div>
+  <ul id="messages"></ul>
+  <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
 </div>
 
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAW_CqI13ElUEXPwVb5jdrW8IewZewPG4&libraries=places&callback=initMap"></script>
 
+<script type="text/javascript" src="../bower_components/angular-socket-io/socket.js"></script>
+<script type="text/javascript" src="../bower_components/socket.io-client/socket.io.js"></script>
 
 <script>
+
+
+//  var socket = io.connect('http://localhost:8080')
+// // socket.on('setup', function(data){
+    
+// //     console.log('something')
+// //   })
+
+
   function initMap() {
     var scope = $('#map').scope();
     scope.userfind();
