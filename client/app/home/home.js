@@ -159,6 +159,9 @@ console.log('hello homepage')
   };
   $scope.directionDisplay = function(){   
     window.directionsDisplay = new google.maps.DirectionsRenderer;
+    console.log(directionsDisplay.setOptions)
+    console.log("I'm executed bitch") 
+    directionsDisplay.setOptions({options:{suppressMarkers:true,preserveViewport:true}})
     directionsDisplay.setMap($scope.map)
   }
 // GEOLOCATE USER'S POSITION
