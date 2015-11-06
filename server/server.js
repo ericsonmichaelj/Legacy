@@ -9,12 +9,20 @@ var passport = require('passport');  // auth via passport
 var FacebookStrategy = require('passport-facebook').Strategy;  // FB auth via passport
 var cookieParser = require('cookie-parser');  // parses cookies
 var uriUtil = require('mongodb-uri');  // util for Mongo URIs
+var http = require('http');
+var sockets = require('socket.io');
 
 // SCHEMA / MODELS
 var User = require('./models/userModel.js');
 var Site = require('./models/siteModel.js');
 
-var app = express();     // define our app using express
+var app = express(); 
+var server = http.createServer(app)
+    // define our app using express
+var io = sockets(server)
+
+
+
 var port = process.env.PORT || 8080;   // set our port
 
 app.use(bodyParser.urlencoded({ extended: true })); // use bodyParser() for req body parsing
@@ -66,12 +74,32 @@ app.use('/siteinfo', router);
 app.use('/checkin', router);
 app.use('/checkout', router);
 app.use('/auth/facebook',router);
-app.use('callback',router);
+app.use('callback', router);
+
 
 
 // SERVER INIT
-app.listen(port);
+server.listen(port);
 console.log('Unbalanced magic is happening on port ' + port);
+
+//listen for the connection
+io.on('connection', function(socket){
+   console.log('hello, socket is connected')
+
+  var defaultSport = 'general';
+  var rooms = ["general","another"]
+
+  //emit the sports array on setup of connection
+  socket.emit('setup', {rooms: rooms});
+
+
+
+socket.on('new message', function(data){
+  console.log('new message received', data)
+  io.sockets.emit('message created', data)
+})
+
+});
 
 
 // DB TESTING - keep this! uncomment to test if db is connected
