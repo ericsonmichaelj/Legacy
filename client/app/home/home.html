@@ -36,6 +36,7 @@
         <form name="change-location" class="navbar-form navbar-right address-selection" role="search" ng-submit="changeLocation(locationData)">
           <div class="form-group">
             <input id="location-search" type="text" class="form-control" placeholder="Change location..." ng-model="locationData" >
+            <p>{{locationData}}</p>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
@@ -58,7 +59,18 @@
         <ul>
           <p ng-show="!sitesResults.length" class="empty-list">No results found</p>
           <li ng-repeat="elm in sitesResults | filter: siteSearch as results" class="site-list-elm" data-placeId="{{elm.place_id}}">
-            <p class="sitename" ng-click="siteListClick($index)"> {{elm.name}} </p>
+
+
+
+            <p class="sitename" ng-click="siteListClick($index)">
+
+            <!-- begin streetview display -->
+
+            <img ng-src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location={{elm.name}}, {{elm.vicinity}}"/>
+            </span>
+            <!-- end streetview display -->
+
+            {{elm.name}} </p>
             <span class="user-checkins">
               <i class="fa fa-user"></i>{{elm.checkins}}
             </span>
