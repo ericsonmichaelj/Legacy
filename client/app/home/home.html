@@ -1,4 +1,6 @@
 
+
+
 <div id="home-page" >
 
   <nav class="navbar navbar-default map-navbar row site-selection">
@@ -98,14 +100,29 @@
     </div>
 
   </div>
+  <i class="fa fa-print fa-2x" onClick="window.print()">Print Directions</i>
+  <i class="fa fa-envelope fa-2x"> Email Directions</i>
   <div id="direction-display"></div>
+
 </div>
 
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAW_CqI13ElUEXPwVb5jdrW8IewZewPG4&libraries=places&callback=initMap"></script>
-
+<script type ="text/javascript" src ="../assets/js/jquery.printElement.min.js"
 <script type="text/javascript" src="../bower_components/angular-socket-io/socket.js"></script>
 <script type="text/javascript" src="../bower_components/socket.io-client/socket.io.js"></script>
+
+<style>
+  @media print {
+    body {
+      visibility: hidden;
+    }
+    #direction-display {
+      visibility: visible;
+    }
+  }
+</style>
+
 
 <script>
 
@@ -115,14 +132,14 @@
     
 // //     console.log('something')
 // //   })
-
+  // function printDirections(){
+  //   $('.direction-display').printElement();
+  // }
 
   function initMap() {
     var scope = $('#map').scope();
-    var scope2 = $('#direction-display').scope();
     scope.userfind();
     scope.directionDisplay();
-    scope2.directionDisplay2();
     google.maps.event.addDomListener(window, 'load', initialize);
   }
 
