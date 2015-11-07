@@ -58,25 +58,28 @@ console.log('hello homepage')
   $scope.currentRankByFlag;
   $scope.checkins;
 
-
-
-  // $scope.sports = {
-  //   'Basketball': 'Basketball Court',
-  //   'Soccer': 'Soccer Field',
-  //   'Tennis': 'Tennis Court',
-  //   'Baseball': 'Baseball Field',
-  //   'Softball': 'Softball Field',
-  //   'Gym': 'Gym',
-  //   'Rock-Climbing': 'Climbing Gym',
-  //   'Golf': 'Golf Course',
-  //   'Racquetball': 'Racquetball Court',
-  //   'Squash': 'Squash Court'
-  // };
-
-
-
+  $scope.TransportationCategory= {
+    "Driving": "car",
+    "Walking": "male",
+    "Bicyling":"bicycle",
+    "Transit":"bus"
+  }
+  $scope.sports = {
+    'Basketball': 'Basketball Court',
+    'Soccer': 'Soccer Field',
+    'Tennis': 'Tennis Court',
+    'Baseball': 'Baseball Field',
+    'Softball': 'Softball Field',
+    'Gym': 'Gym',
+    'Rock-Climbing': 'Climbing Gym',
+    'Golf': 'Golf Course',
+    'Racquetball': 'Racquetball Court',
+    'Squash': 'Squash Court'
+  };
 
 // OTHER VARIABLES
+  var transportation = "DRIVING";
+
   var defaultLocation = {  // this is SF
     lat: 37.7833,
     lng: -122.4167
@@ -103,6 +106,12 @@ console.log('hello homepage')
 
 
 // CHANGE USER'S LOCATION
+  $scope.SelectTransportation = function(base,icon){
+    $scope.SelectedIcon = icon;
+    $scope.SelectedBase = base;
+    transportation = base.toUpperCase();
+
+  };
   $scope.changeLocation = function(locationData) {
     geocoder = new google.maps.Geocoder();  // init Geocoder
 
@@ -223,7 +232,7 @@ console.log('hello homepage')
     service.getDistanceMatrix({
       origins : [origin],
       destinations : [destination],
-      travelMode: google.maps.TravelMode.DRIVING
+      travelMode: google.maps.TravelMode[transportation]
     },DistanceMatrixServiceCallback)
     function DistanceMatrixServiceCallback(response,status){
       $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
@@ -260,7 +269,7 @@ console.log('hello homepage')
       directionsService.route({
         origin: $scope.userPosition,
         destination: destination,
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: google.maps.TravelMode[transportation]
 
       },function(response,status){
          if (status === google.maps.DirectionsStatus.OK) {
