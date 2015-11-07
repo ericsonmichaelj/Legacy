@@ -16,6 +16,19 @@ app.factory('socket', function (socketFactory) {
     return socket;
 });
 
+app.directive('ngEnter', function () {
+    return function (scope, element, attributes) {
+        element.bind("keydown keypress", function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
+                    scope.$eval(attributes.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket',  function($scope, $log, $http, $mdDialog, socket) {
 
@@ -32,9 +45,9 @@ socket.on('setup', function (data) {
         for (var key in sports){
           roomsArray.push(sports[key])
         };
-        // console.log(roomsArray)
+    
         $scope.rooms = roomsArray;
-      })
+      });
 
 socket.on('message created', function (data){
  $scope.messages.unshift(data)
