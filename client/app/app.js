@@ -16,7 +16,7 @@ angular.module('myApp', [
       templateUrl: 'chats.html',
       controller: 'homeController'
     })
-    .otherwise({redirect: '/home'});
+    .otherwise({redirectTo: '/home'});
   
 }])
 

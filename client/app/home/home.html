@@ -38,7 +38,6 @@
         <form name="change-location" class="navbar-form navbar-right address-selection" role="search" ng-submit="changeLocation(locationData)">
           <div class="form-group">
             <input id="location-search" type="text" class="form-control" placeholder="Change location..." ng-model="locationData" >
-            <p>{{locationData}}</p>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
@@ -93,10 +92,6 @@
     </div>
 
   </div>
-  <ul id="messages"></ul>
-  <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
   <div id="direction-display"></div>
 </div>
 
@@ -120,8 +115,8 @@
     var scope = $('#map').scope();
     var scope2 = $('#direction-display').scope();
     scope.userfind();
-    //scope.directionDisplay();
-    scope2.directionDisplay();
+    scope.directionDisplay();
+    scope2.directionDisplay2();
     google.maps.event.addDomListener(window, 'load', initialize);
   }
 

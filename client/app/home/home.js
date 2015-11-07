@@ -157,10 +157,14 @@ console.log('hello homepage')
         $scope.clickedPosition = event.latLng;
     });
   };
+
   $scope.directionDisplay = function(){   
     window.directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setOptions({options:{suppressMarkers:true,preserveViewport:true}})
     directionsDisplay.setMap($scope.map)
+  }
+
+  $scope.directionDisplay2 = function(){   
     directionsDisplay.setPanel(document.getElementById("direction-display"));
   }
 // GEOLOCATE USER'S POSITION
