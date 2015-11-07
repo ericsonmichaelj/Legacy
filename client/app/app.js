@@ -1,5 +1,5 @@
-// Unbalanced ()) Greenfield Project
-// =============================================================================
+(function() {
+'use strict';
 
 angular.module('myApp', [
   'ngRoute',
@@ -35,9 +35,12 @@ angular.module('myApp', [
       'fbUserId' : fbCookie.fbId,
       'fbUserName' : fbCookie.fbUserName,
       'fbPicture' : fbCookie.fbPicture
-    }
+    };
+    
     $scope.user = user;
     $scope.fbCookie = true;
   }
 
 }]);
+
+});
