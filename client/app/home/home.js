@@ -5,16 +5,9 @@ angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons',
 
 
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/home', {
-    templateUrl: 'home/home.html',
-    controller: 'homeController'
-  });
-}])
+.controller('homeController', ['$scope', '$log', '$http', '$mdDialog',  function($scope, $log, $http, $mdDialog) {
 
-.controller('homeController', ['$scope', '$log', '$http',  function($scope, $log, $http, $mdDialog, socket) {
-
-
+console.log('hello homepage')
 // $SCOPE VARIABLES
   
   $scope.map;

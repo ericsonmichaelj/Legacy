@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('chat', ['ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io'])
+var app = angular.module('chat', ['ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io']);
 var serverBaseUrl = 'http://localhost:8080';
 app.factory('socket', function (socketFactory) {
     var myIoSocket = io.connect(serverBaseUrl);
@@ -16,6 +16,7 @@ app.controller('MainCtrl', function ($scope, $mdDialog, socket, $http) {
     $scope.messages = [];
     $scope.room = "default";
     $scope.username = "sonny"
+
 
     
 

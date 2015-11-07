@@ -17,6 +17,19 @@
   <script src="assets/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="dist/css/app.css">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+      <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="../bower_components/animate.css/animate.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.11.4/angular-material.css">
+
+    <script src="bower_components/angular/angular.js"></script>
+
+    <script type="text/javascript" src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-aria/angular-aria.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-material/angular-material.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-material-icons/angular-material-icons.js"></script>
+
+    <script type="text/javascript" src="../bower_components/angular-socket-io/socket.js"></script>
+    <script type="text/javascript" src="../bower_components/socket.io-client/socket.io.js"></script>
 
 
   </head>
@@ -35,7 +48,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#/home">GāME</a>
-      <a class="navbar-brand" href="./chats.html">Chats</a>
+      <a class="navbar-brand" href="#/chats">Chats</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -70,11 +83,14 @@
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
 -->
-  <script src="bower_components/angular/angular.js"></script>
+   <!-- <script src="bower_components/angular/angular.js"></script>
+  
+  -->
+  <script src="bower_components/angular-cookies/angular-cookies.min.js"></script> 
   <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
   <script src="assets/js/app.extra.js"></script>
-
-  <script src="dist/js/app.min.js"></script>
+  <script src="home/home.js"></script>
+  <script src="/chats.js"></script>
+  <script src="/app.js"></script>
 </body>
 </html>
