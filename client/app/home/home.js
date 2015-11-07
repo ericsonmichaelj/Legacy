@@ -16,14 +16,22 @@ app.factory('socket', function (socketFactory) {
     return socket;
 });
 
+//custom directive for sending message on enter - ng-enter in template
 app.directive('ngEnter', function () {
+  //define the link function, which allows us to manipulate the DOM
     return function (scope, element, attributes) {
+        //bind the keydown keypress event, the the DOM element our directive is associated with
         element.bind("keydown keypress", function (event) {
+            //if it's enter key
             if (event.which === 13) {
+                //then, with the current scope...
                 scope.$apply(function () {
+                    //evaluate the function passed into our ngEnter directive, (send in our case)
+                    //with whatever the arguments are that are passed into our ngEnter's function, (message in our case)
+                    //attriubutes are the attributes of our target element, this = message in our case
                     scope.$eval(attributes.ngEnter);
                 });
-
+                //prevent default behaviour of form
                 event.preventDefault();
             }
         });
