@@ -52,7 +52,7 @@ socket.on('setup', function (data) {
         var roomsArray = new Array;
         for (var key in sports){
           roomsArray.push(sports[key])
-        };
+        }
     
         $scope.rooms = roomsArray;
       });
