@@ -1,10 +1,4 @@
-body {
-    background: #fafafa !important;
-}
 
-.select-header .md-select-label.md-placeholder {
-    color: #fff
-}
 
 .footer {
     background: #fff;
@@ -15,7 +9,3 @@ body {
 }
 
 
-
-md-select .md-select-label.md-placeholder{
-color: #fff;
-}

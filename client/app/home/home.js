@@ -27,6 +27,13 @@ socket.on('setup', function (data) {
         var sports = data.sports;
   
         $scope.sports = sports
+
+        var roomsArray = new Array;
+        for (var key in sports){
+          roomsArray.push(sports[key])
+        };
+        // console.log(roomsArray)
+        $scope.rooms = roomsArray;
       })
 
 socket.on('message created', function (data){
