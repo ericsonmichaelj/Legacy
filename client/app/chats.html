@@ -4,56 +4,38 @@
     <link rel="stylesheet" href="../bower_components/animate.css/animate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.11.4/angular-material.css">
 
-<div ng-init="usernameModal()">
-      <md-content>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <md-button class="md-icon-button" aria-label="Settings">
-              
+<div layout="row"  ng-init="usernameModal()">
 
-
-                </md-button>
-                <h2>
-          <span>Game Chat</span>
-        </h2>
-                <span flex></span>
-
-                <md-select placeholder="Rooms"  ng-model="room" ng-change="changeRoom(room)">
+        <div flex="33">
+          <md-subheader class="md-primary">Change sport:</md-subheader>
+              <md-select placeholder="Rooms"  ng-model="room" >
+            <!--   ng-change="changeRoom(room)" -->
                     <md-option ng-repeat="r in rooms" value="{{r}}">{{r}}</md-option>
                 </md-select>
-            </div>
-        </md-toolbar>
-        <section>
-            <md-list>
-        <!--         <md-subheader class="md-primary header">Room: {{room}} <span align="right">Userame: {{username}} </span> </md-subheader> -->
-
-                <md-whiteframe ng-repeat="m in messages" class="md-whiteframe-z2 message" layout layout-align="center center">
-                    <md-list-item class="md-3-line">
-                        <img ng-src="../assets/images/baseball.png" class="md-avatar" alt="User" />
-                        <div class="md-list-item-text">
-                            <h4>{{ m.username }}</h4>
-                             <h4>{{ m.room }}</h4>
-                            <p>{{m.message}}</p>
-                        </div>
-                    </md-list-item>
-                </md-whiteframe>
-
-            </md-list>
-        </section>
-
-        <div class="footer">
-
+                <md-list>
+                          <md-list-item ng-repeat="m in messages" class="md-3-line">
+                            <img ng-src="../assets/images/baseball.png" class="md-avatar" />
+                            <div class="md-list-item-text">
+                              <h3>user: {{ m.username  }}</h3>
+                              <h4>room: {{ m.room }}</h4>
+                              <p>{{ m.message}}</p>
+                            </div>
+                          </md-list-item>
+                         
+                </md-list>
+       
+    <div class="footer">
+        <div flex="33">
 
             <md-input-container>
                 <label>Message</label>
-                <textarea ng-model="message" columns="1" md-maxlength="100" ng-enter="send(message)"></textarea>
+            <textarea ng-model="message" columns="1" md-maxlength="100" ng-enter="send(message)"></textarea>
 
             </md-input-container>
-            <md-button ng-click="send(message)"> Send message </md-button>
-
+            <md-button ng-click="send(message)" class="md-raised md-primary"> Send message </md-button>
 
         </div>
+    </div>
+    
 
-    </md-content>
-</div>
 </div>

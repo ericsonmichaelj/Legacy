@@ -16,6 +16,27 @@ app.factory('socket', function (socketFactory) {
     return socket;
 });
 
+//custom directive for sending message on enter - ng-enter in template
+app.directive('ngEnter', function () {
+  //define the link function, which allows us to manipulate the DOM
+    return function (scope, element, attributes) {
+        //bind the keydown keypress event, the the DOM element our directive is associated with
+        element.bind("keydown keypress", function (event) {
+            //if it's enter key
+            if (event.which === 13) {
+                //then, with the current scope...
+                scope.$apply(function () {
+                    //evaluate the function passed into our ngEnter directive, (send in our case)
+                    //with whatever the arguments are that are passed into our ngEnter's function, (message in our case)
+                    //attriubutes are the attributes of our target element, this = message in our case
+                    scope.$eval(attributes.ngEnter);
+                });
+                //prevent default behaviour of form
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket',  function($scope, $log, $http, $mdDialog, socket) {
 
@@ -27,12 +48,33 @@ socket.on('setup', function (data) {
         var sports = data.sports;
   
         $scope.sports = sports
-      })
+
+        var roomsArray = new Array;
+        for (var key in sports){
+          roomsArray.push(sports[key])
+        }
+    
+        $scope.rooms = roomsArray;
+      });
 
 socket.on('message created', function (data){
  $scope.messages.unshift(data)
 
 });
+
+//function to handle activity when room/sport is changed
+$scope.changeRoom = function(clickedRoom){
+  $scope.room = clickedRoom.toUpperCase();
+  //emit the switch room signal to the server with the clicked room
+  socket.emit('switch room', {
+    newRoom: clickedRoom
+  });
+  $http.get(serverBaseUrl + '/msg?room=' + clickedRoom).success(function(msgs){
+    $scope.messages = msgs;
+  });
+
+
+};
 
 
 //function to call when enter key hit, it emits a signal back to the server
