@@ -135,24 +135,25 @@ console.log('hello homepage')
     } 
   }
 
-
-// CHANGE USER'S LOCATION
+//
+//SELECT FORM OF TRANSPORATION
   $scope.SelectTransportation = function(base,icon){
     $scope.SelectedIcon = icon;
     $scope.SelectedBase = base;
     transportation = base.toUpperCase();
-    console.log(currentDestination);
-    getDirections(currentDestination);
-    _.each($scope.sitesResults,function(result,element){
-       var placeLoc = result.geometry.location;
-      var placeLng = placeLoc.lng();
-      var placeLat = placeLoc.lat();
-      var destination = {lat:placeLat,lng:placeLng};
-      getDistanceandDuration(destination,element);     
-    });
-
-
+    if(currentDestination){
+      getDirections(currentDestination);
+      _.each($scope.sitesResults,function(result,element){
+         var placeLoc = result.geometry.location;
+        var placeLng = placeLoc.lng();
+        var placeLat = placeLoc.lat();
+        var destination = {lat:placeLat,lng:placeLng};
+        getDistanceandDuration(destination,element);     
+      });
+    }
   };
+
+// CHANGE USER'S LOCATION  
   $scope.changeLocation = function(locationData) {
     geocoder = new google.maps.Geocoder();  // init Geocoder
 
