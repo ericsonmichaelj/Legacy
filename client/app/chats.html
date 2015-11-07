@@ -8,7 +8,8 @@
 
         <div flex="33">
           <md-subheader class="md-primary">Change sport:</md-subheader>
-              <md-select placeholder="Rooms"  ng-model="room" ng-change="changeRoom(room)">
+              <md-select placeholder="Rooms"  ng-model="room" >
+            <!--   ng-change="changeRoom(room)" -->
                     <md-option ng-repeat="r in rooms" value="{{r}}">{{r}}</md-option>
                 </md-select>
                 <md-list>
