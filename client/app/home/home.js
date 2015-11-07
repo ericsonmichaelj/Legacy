@@ -20,7 +20,12 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.clickedPosition;
   $scope.currentRankByFlag;
   $scope.checkins;
-
+  $scope.TransportationCategory= {
+    "Driving": "car",
+    "Walking": "male",
+    "Bicyling":"bicycle",
+    "Transit":"bus"
+  }
   $scope.sports = {
     'Basketball': 'Basketball Court',
     'Soccer': 'Soccer Field',
@@ -35,6 +40,8 @@ angular.module('myApp.home', ['ngRoute'])
   };
 
 // OTHER VARIABLES
+  var transportation = "DRIVING";
+
   var defaultLocation = {  // this is SF
     lat: 37.7833,
     lng: -122.4167
@@ -61,6 +68,12 @@ angular.module('myApp.home', ['ngRoute'])
 
 
 // CHANGE USER'S LOCATION
+  $scope.SelectTransportation = function(base,icon){
+    $scope.SelectedIcon = icon;
+    $scope.SelectedBase = base;
+    transportation = base.toUpperCase();
+
+  };
   $scope.changeLocation = function(locationData) {
     geocoder = new google.maps.Geocoder();  // init Geocoder
 
@@ -176,7 +189,7 @@ angular.module('myApp.home', ['ngRoute'])
     service.getDistanceMatrix({
       origins : [origin],
       destinations : [destination],
-      travelMode: google.maps.TravelMode.DRIVING
+      travelMode: google.maps.TravelMode[transportation]
     },DistanceMatrixServiceCallback)
     function DistanceMatrixServiceCallback(response,status){
       $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
@@ -213,7 +226,7 @@ angular.module('myApp.home', ['ngRoute'])
       directionsService.route({
         origin: $scope.userPosition,
         destination: destination,
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: google.maps.TravelMode[transportation]
 
       },function(response,status){
          if (status === google.maps.DirectionsStatus.OK) {

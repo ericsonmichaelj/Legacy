@@ -18,20 +18,26 @@
               <li class="sport-item" ng-repeat="(sport, keyword) in sports" ng-click="populateList(keyword, sport)"><a>{{ sport }}</a></li>
             </ul>
           </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Date<span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu sport">
-              <li><a>...</a></li>
-            </ul>
-          </li>
           <li class="selected-sport">
             <a>
               <span class="{{ selectedSport }}"></span> {{ selectedSport }}
             </a>
           </li>
+         <li class="dropdown">
+            <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Transportation Category<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu sport">
+              <li class="sport-item" ng-repeat="(base, icon) in TransportationCategory" ng-click="SelectTransportation(base,icon)"> <a>{{ base }} <i class="fa fa-{{icon}}"></i> </a>
 
+              </li>
+            </ul>
+          </li>
+          <li class="selected-sport">
+            <a>
+             <i class="fa fa-{{SelectedIcon}}"></i>  {{SelectedBase}}
+            </a>
+          </li>
         </ul>
         <form name="change-location" class="navbar-form navbar-right address-selection" role="search" ng-submit="changeLocation(locationData)">
           <div class="form-group">
