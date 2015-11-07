@@ -11,7 +11,7 @@ var User = require('./models/userModel.js');  // our user schema
 var Site = require('./models/siteModel.js');  // our site schema
 var router = express.Router();           // create our Express router
 var cookieParser = require('cookie-parser');
-
+var nodemailer = require("nodemailer");
 
 // SITES
 router.post('/siteinfo', utils.postSiteInfo);
@@ -19,6 +19,34 @@ router.post('/siteinfo', utils.postSiteInfo);
 router.post('/checkin', utils.siteCheckin);
 
 router.post('/checkout', utils.siteCheckout);
+
+//NODE-MAILER
+var smtpTransport = nodemailer.createTransport("SMTP", {
+  service: "Gmail",
+  auth: {
+    user: "gaamemailer@gmail.com",
+    pass: "gaame123"
+  }
+});
+
+router.post('/send', function(req, res) {
+  console.log(req.body);
+  var mailOptions = {
+    to: req.body.to,
+    subject: req.body.subject,
+    html: req.body.message
+  }
+  console.log(mailOptions);
+  smtpTransport.sendMail(mailOptions, function(error, response) {
+    if (error) {
+      console.log(error);
+      res.end("error");
+    } else {
+      console.log("Message sent: " + response.message);
+      res.end("sent");
+    }
+  });
+});
 
 
 

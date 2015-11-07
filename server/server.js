@@ -116,6 +116,10 @@ socket.on('new message', function(data){
 });
 
 
+
+
+
+
 // DB TESTING - keep this! uncomment to test if db is connected
   // var userCreate = Q.nbind(User.create, User);
   // var newUser = {
