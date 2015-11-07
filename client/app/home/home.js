@@ -62,6 +62,20 @@ socket.on('message created', function (data){
 
 });
 
+//function to handle activity when room/sport is changed
+$scope.changeRoom = function(clickedRoom){
+  $scope.room = clickedRoom.toUpperCase();
+  //emit the switch room signal to the server with the clicked room
+  socket.emit('switch room', {
+    newRoom: clickedRoom
+  });
+  $http.get(serverBaseUrl + '/msg?room=' + clickedRoom).success(function(msgs){
+    $scope.messages = msgs;
+  });
+
+
+};
+
 
 //function to call when enter key hit, it emits a signal back to the server
 $scope.send = function(msg){
