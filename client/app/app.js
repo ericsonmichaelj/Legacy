@@ -14,7 +14,7 @@ angular.module('myApp', [
   })
     .when('/chats', {
       templateUrl: 'chats.html',
-      controller: 'MainCtrl'
+      controller: 'homeController'
     })
     .otherwise({redirect: '/home'});
   

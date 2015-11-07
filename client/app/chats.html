@@ -25,14 +25,14 @@
         </md-toolbar>
         <section>
             <md-list>
-                <md-subheader class="md-primary header">Room: {{room}} <span align="right">Userame: {{username}} </span> </md-subheader>
+        <!--         <md-subheader class="md-primary header">Room: {{room}} <span align="right">Userame: {{username}} </span> </md-subheader> -->
 
                 <md-whiteframe ng-repeat="m in messages" class="md-whiteframe-z2 message" layout layout-align="center center">
                     <md-list-item class="md-3-line">
                         <img ng-src="../assets/images/baseball.png" class="md-avatar" alt="User" />
                         <div class="md-list-item-text">
-                            <h3>{{ m.username }}</h3>
-                             <h3>{{ m.room }}</h3>
+                            <h4>{{ m.username }}</h4>
+                             <h4>{{ m.room }}</h4>
                             <p>{{m.message}}</p>
                         </div>
                     </md-list-item>

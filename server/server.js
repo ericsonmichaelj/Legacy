@@ -87,10 +87,24 @@ io.on('connection', function(socket){
    console.log('why hello there, socket.io')
 
   var defaultSport = 'general';
-  var rooms = ["general","another"]
+
+  var sports = {
+    'Basketball': 'Basketball Court',
+    'Soccer': 'Soccer Field',
+    'Tennis': 'Tennis Court',
+    'Baseball': 'Baseball Field',
+    'Softball': 'Softball Field',
+    'Gym': 'Gym',
+    'Rock-Climbing': 'Climbing Gym',
+    'Golf': 'Golf Course',
+    'Racquetball': 'Racquetball Court',
+    'Squash': 'Squash Court'
+  };
+
+
 
   //emit the sports array on setup of connection
-  socket.emit('setup', {rooms: rooms});
+  socket.emit('setup', {sports: sports});
 
 
 

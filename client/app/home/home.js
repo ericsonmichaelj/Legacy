@@ -1,11 +1,51 @@
 (function() {
 'use strict';
 
-angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io', 'chat'])
+var app = angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io', 'btford.socket-io'])
+
+     
+var serverBaseUrl = 'http://localhost:8080';
+
+app.factory('socket', function (socketFactory) {
+    var myIoSocket = io.connect(serverBaseUrl);
+
+    var socket = socketFactory({
+        ioSocket: myIoSocket
+    });
+
+    return socket;
+});
 
 
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket',  function($scope, $log, $http, $mdDialog, socket) {
 
-.controller('homeController', ['$scope', '$log', '$http', '$mdDialog',  function($scope, $log, $http, $mdDialog) {
+     $scope.messages = [];
+     $scope.room = "default";
+     $scope.username = "sonny";
+ //server opens connection, when client connects, setup event is called, load rooms   
+socket.on('setup', function (data) {
+        var sports = data.sports;
+  
+        $scope.sports = sports
+      })
+
+socket.on('message created', function (data){
+ $scope.messages.unshift(data)
+
+});
+
+
+//function to call when enter key hit, it emits a signal back to the server
+$scope.send = function(msg){
+ socket.emit('new message',{
+   room: $scope.room,
+   message: msg,
+   username: $scope.username
+ });
+
+ $scope.message= ""
+}
+ 
 
 console.log('hello homepage')
 // $SCOPE VARIABLES
@@ -20,18 +60,18 @@ console.log('hello homepage')
 
 
 
-  $scope.sports = {
-    'Basketball': 'Basketball Court',
-    'Soccer': 'Soccer Field',
-    'Tennis': 'Tennis Court',
-    'Baseball': 'Baseball Field',
-    'Softball': 'Softball Field',
-    'Gym': 'Gym',
-    'Rock-Climbing': 'Climbing Gym',
-    'Golf': 'Golf Course',
-    'Racquetball': 'Racquetball Court',
-    'Squash': 'Squash Court'
-  };
+  // $scope.sports = {
+  //   'Basketball': 'Basketball Court',
+  //   'Soccer': 'Soccer Field',
+  //   'Tennis': 'Tennis Court',
+  //   'Baseball': 'Baseball Field',
+  //   'Softball': 'Softball Field',
+  //   'Gym': 'Gym',
+  //   'Rock-Climbing': 'Climbing Gym',
+  //   'Golf': 'Golf Course',
+  //   'Racquetball': 'Racquetball Court',
+  //   'Squash': 'Squash Court'
+  // };
 
 
 
