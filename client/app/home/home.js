@@ -122,7 +122,18 @@ console.log('hello homepage')
       }
     })
   }
-
+  function getDistanceandDuration(destination,element){
+    var service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix({
+      origins : [$scope.userPosition],
+      destinations : [destination],
+      travelMode: google.maps.TravelMode[transportation]
+    },DistanceMatrixServiceCallback)
+    function DistanceMatrixServiceCallback(response,status){
+      $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
+      $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
+    } 
+  }
 
 
 // CHANGE USER'S LOCATION
@@ -132,6 +143,14 @@ console.log('hello homepage')
     transportation = base.toUpperCase();
     console.log(currentDestination);
     getDirections(currentDestination);
+    _.each($scope.sitesResults,function(result,element){
+       var placeLoc = result.geometry.location;
+      var placeLng = placeLoc.lng();
+      var placeLat = placeLoc.lat();
+      var destination = {lat:placeLat,lng:placeLng};
+      getDistanceandDuration(destination,element);     
+    });
+
 
   };
   $scope.changeLocation = function(locationData) {
@@ -250,19 +269,7 @@ console.log('hello homepage')
     //THIS STARTS THE INPUT NECESSARY TO FIND THE DISTANCE!
     var destination = {lat:placeLat,lng:placeLng};
     var origin = $scope.userPosition;
-    var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins : [origin],
-      destinations : [destination],
-      travelMode: google.maps.TravelMode[transportation]
-    },DistanceMatrixServiceCallback)
-    function DistanceMatrixServiceCallback(response,status){
-      $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
-      $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
-    } 
-
-
-
+    getDistanceandDuration(destination,element)
     if (place.opening_hours && place.opening_hours.open_now) {  // not all Places have opening_hours property, will error on variable assign if they don't
       placeOpenNow = 'Open to play right now!';
       placeOpenNowClass = 'open';
