@@ -4,7 +4,7 @@
 var app = angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io', 'btford.socket-io'])
 
      
-var serverBaseUrl = 'http://localhost:8080';
+var serverBaseUrl = 'http://localhost:8080'; //ec2-54-175-174-234.compute-1.amazonaws.com
 
 app.factory('socket', function (socketFactory) {
     var myIoSocket = io.connect(serverBaseUrl);
