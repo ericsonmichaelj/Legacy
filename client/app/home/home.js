@@ -1,18 +1,55 @@
 (function() {
 'use strict';
 
-angular.module('myApp.home', ['ngRoute'])
+var app = angular.module('myApp.home', ['ngRoute', 'ngMaterial', 'ngAnimate', 'ngMdIcons', 'btford.socket-io', 'btford.socket-io'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/home', {
-    templateUrl: 'home/home.html',
-    controller: 'homeController'
-  });
-}])
+     
+var serverBaseUrl = 'http://localhost:8080';
 
-.controller('homeController', ['$scope', '$log', '$http', function($scope, $log, $http) {
+app.factory('socket', function (socketFactory) {
+    var myIoSocket = io.connect(serverBaseUrl);
 
+    var socket = socketFactory({
+        ioSocket: myIoSocket
+    });
+
+    return socket;
+});
+
+
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket',  function($scope, $log, $http, $mdDialog, socket) {
+
+     $scope.messages = [];
+     $scope.room = "default";
+     $scope.username = "sonny";
+ //server opens connection, when client connects, setup event is called, load rooms   
+socket.on('setup', function (data) {
+        var sports = data.sports;
+  
+        $scope.sports = sports
+      })
+
+socket.on('message created', function (data){
+ $scope.messages.unshift(data)
+
+});
+
+
+//function to call when enter key hit, it emits a signal back to the server
+$scope.send = function(msg){
+ socket.emit('new message',{
+   room: $scope.room,
+   message: msg,
+   username: $scope.username
+ });
+
+ $scope.message= ""
+}
+ 
+
+console.log('hello homepage')
 // $SCOPE VARIABLES
+  
   $scope.map;
   $scope.userPosition;
   $scope.sitesResults;
@@ -21,18 +58,23 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.currentRankByFlag;
   $scope.checkins;
 
-  $scope.sports = {
-    'Basketball': 'Basketball Court',
-    'Soccer': 'Soccer Field',
-    'Tennis': 'Tennis Court',
-    'Baseball': 'Baseball Field',
-    'Softball': 'Softball Field',
-    'Gym': 'Gym',
-    'Rock-Climbing': 'Climbing Gym',
-    'Golf': 'Golf Course',
-    'Racquetball': 'Racquetball Court',
-    'Squash': 'Squash Court'
-  };
+
+
+  // $scope.sports = {
+  //   'Basketball': 'Basketball Court',
+  //   'Soccer': 'Soccer Field',
+  //   'Tennis': 'Tennis Court',
+  //   'Baseball': 'Baseball Field',
+  //   'Softball': 'Softball Field',
+  //   'Gym': 'Gym',
+  //   'Rock-Climbing': 'Climbing Gym',
+  //   'Golf': 'Golf Course',
+  //   'Racquetball': 'Racquetball Court',
+  //   'Squash': 'Squash Court'
+  // };
+
+
+
 
 // OTHER VARIABLES
   var defaultLocation = {  // this is SF
@@ -115,10 +157,15 @@ angular.module('myApp.home', ['ngRoute'])
         $scope.clickedPosition = event.latLng;
     });
   };
+
   $scope.directionDisplay = function(){   
     window.directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setOptions({options:{suppressMarkers:true,preserveViewport:true}})
     directionsDisplay.setMap($scope.map)
+    directionsDisplay.setPanel(document.getElementById("direction-display"));
+  }
+
+  $scope.directionDisplay2 = function(){   
     directionsDisplay.setPanel(document.getElementById("direction-display"));
   }
 // GEOLOCATE USER'S POSITION

@@ -1,20 +1,29 @@
-(function() {
-"use strict";
+// Unbalanced ()) Greenfield Project
+// =============================================================================
 
 angular.module('myApp', [
   'ngRoute',
-  'ngCookies', 
+  'ngCookies',
   'myApp.home'
 ])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider
+    $routeProvider.when('/home', {
+    templateUrl: 'home/home.html',
+    controller: 'homeController'
+  })
+    .when('/chats', {
+      templateUrl: 'chats.html',
+      controller: 'homeController'
+    })
     .otherwise({redirectTo: '/home'});
+  
 }])
 
 .controller('mainController', ['$scope', '$cookies', function($scope, $cookies) {
 
 // COOKIES
+
   $scope.fbCookie = false;
   var fbCookie = $cookies.get('facebook');  // get cookie from FB
 
@@ -26,11 +35,9 @@ angular.module('myApp', [
       'fbUserId' : fbCookie.fbId,
       'fbUserName' : fbCookie.fbUserName,
       'fbPicture' : fbCookie.fbPicture
-    };
+    }
     $scope.user = user;
     $scope.fbCookie = true;
   }
 
 }]);
-
-})();
