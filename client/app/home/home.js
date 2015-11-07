@@ -104,7 +104,7 @@ console.log('hello homepage')
   var userMarker;
   var searchLocation;
   var currentDestination;
-
+  var currentDestionationName;
 //DIRECTIONS AND DISTANCE FUNCTIONS
 
   function getDirections(destination){
@@ -153,14 +153,24 @@ console.log('hello homepage')
     }
   };
 
-//PRINT DIRECTIONS
-$scope.PrintDirections = function(){
-var content = document.getElementById('direction-display'); //has to be first.
-console.log(content);
-var win = window.open();
-win.document.write(content);
-win.print();
-win.close();
+//EMAIL DIRECTIONS
+$scope.emailaddress;
+var sendemaildata = {};
+
+$scope.emailDirections = function(){
+  $('#emailModal').modal('toggle');
+}
+$scope.sendEmail = function(){
+  sendemaildata.subject = "Here are the directions to " + currentDestionationName;                            
+  sendemaildata.to = $scope.emailaddress;
+  sendemaildata.message = document.getElementById("direction-display").innerHTML
+  console.log(sendemaildata.message);
+  console.log(sendemaildata)
+  $http({
+    method: "POST",
+    url: "/send",
+    data: sendemaildata
+  })
 }
 
 
@@ -307,6 +317,7 @@ win.close();
       $('*[data-placeId] .sitename').css("font-weight", "normal");  // make text for list item bold
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
       currentDestination = destination;
+      currentDestionationName = placeName;
       getDirections(destination);
       infowindow.setContent('<div class="infowindow-name">' + placeName + '</div><div class="infowindow-open ' + placeOpenNowClass + '">' + placeOpenNow + '</div><div class="infowindow-vicinity">' + placeVicinity + '</div');
       infowindow.open($scope.map, this);  // infowindow popup

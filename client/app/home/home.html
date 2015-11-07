@@ -54,7 +54,7 @@
   </nav>
 
 
-  <div class="row map-site">
+  <div class="row map-site" id="Gmap">
 
     <div class="col-xs-8" id="map">
     </div>
@@ -75,8 +75,8 @@
 
             <!-- begin streetview display -->
 
-            <img ng-src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location={{elm.name}}, {{elm.vicinity}}"/>
-            </span>
+ <!--            <img ng-src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location={{elm.name}}, {{elm.vicinity}}"/>
+            </span> -->
             <!-- end streetview display -->
 
             {{elm.name}} </p>
@@ -100,11 +100,33 @@
     </div>
 
   </div>
-  <i class="fa fa-print fa-2x" onClick="window.print()">Print Directions</i>
-  <i class="fa fa-envelope fa-2x"> Email Directions</i>
-  <div id="direction-display"></div>
+  <i class="fa fa-print fa-2x" onClick="window.print()" >Print Directions</i>
+  <i class="fa fa-envelope fa-2x" ng-click="emailDirections()"> Email Directions</i>
+  <div id="direction-display" ></div>
 
 </div>
+
+<!-- EMAIL Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Type in an e-mail address to send directions to</h4>
+      </div>
+      <div class="modal-body">
+       <div class="control-group">
+        <label class="control-label">Email address</label>
+          <input id="email" name="email" type="text" placeholder="name@example.com" class="input-xlarge" ng-model="emailaddress">
+         <button type="button" class="btn btn-primary" ng-click="sendEmail()">Send</button>     
+    </div>
+  
+    </div>
+
+    </div>
+  </div>
+</div>
+
 
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAW_CqI13ElUEXPwVb5jdrW8IewZewPG4&libraries=places&callback=initMap"></script>
@@ -125,7 +147,6 @@
 
 
 <script>
-
 
 //  var socket = io.connect('http://localhost:8080')
 // // socket.on('setup', function(data){
