@@ -195,6 +195,17 @@ console.log('hello homepage')
     }
   };
 
+//PRINT DIRECTIONS
+$scope.PrintDirections = function(){
+var content = document.getElementById('direction-display'); //has to be first.
+console.log(content);
+var win = window.open();
+win.document.write(content);
+win.print();
+win.close();
+}
+
+
 // CHANGE USER'S LOCATION  
   $scope.changeLocation = function(locationData) {
     geocoder = new google.maps.Geocoder();  // init Geocoder
