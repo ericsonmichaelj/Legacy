@@ -58,25 +58,28 @@ console.log('hello homepage')
   $scope.currentRankByFlag;
   $scope.checkins;
 
-
-
-  // $scope.sports = {
-  //   'Basketball': 'Basketball Court',
-  //   'Soccer': 'Soccer Field',
-  //   'Tennis': 'Tennis Court',
-  //   'Baseball': 'Baseball Field',
-  //   'Softball': 'Softball Field',
-  //   'Gym': 'Gym',
-  //   'Rock-Climbing': 'Climbing Gym',
-  //   'Golf': 'Golf Course',
-  //   'Racquetball': 'Racquetball Court',
-  //   'Squash': 'Squash Court'
-  // };
-
-
-
+  $scope.TransportationCategory= {
+    "Driving": "car",
+    "Walking": "male",
+    "Bicycling":"bicycle",
+    "Transit":"bus"
+  }
+  $scope.sports = {
+    'Basketball': 'Basketball Court',
+    'Soccer': 'Soccer Field',
+    'Tennis': 'Tennis Court',
+    'Baseball': 'Baseball Field',
+    'Softball': 'Softball Field',
+    'Gym': 'Gym',
+    'Rock-Climbing': 'Climbing Gym',
+    'Golf': 'Golf Course',
+    'Racquetball': 'Racquetball Court',
+    'Squash': 'Squash Court'
+  };
 
 // OTHER VARIABLES
+  var transportation = "DRIVING";
+
   var defaultLocation = {  // this is SF
     lat: 37.7833,
     lng: -122.4167
@@ -100,9 +103,56 @@ console.log('hello homepage')
   var geocoder;
   var userMarker;
   var searchLocation;
+  var currentDestination;
+
+//DIRECTIONS AND DISTANCE FUNCTIONS
+
+  function getDirections(destination){
+    var directionsService = new google.maps.DirectionsService;
+    directionsService.route({
+      origin: $scope.userPosition,
+      destination: destination,
+      travelMode: google.maps.TravelMode[transportation]
+
+    },function(response,status){
+       if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response)
+      }else {
+        console.log("Direction request failed")
+      }
+    })
+  }
+  function getDistanceandDuration(destination,element){
+    var service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix({
+      origins : [$scope.userPosition],
+      destinations : [destination],
+      travelMode: google.maps.TravelMode[transportation]
+    },DistanceMatrixServiceCallback)
+    function DistanceMatrixServiceCallback(response,status){
+      $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
+      $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
+    } 
+  }
 
 
 // CHANGE USER'S LOCATION
+  $scope.SelectTransportation = function(base,icon){
+    $scope.SelectedIcon = icon;
+    $scope.SelectedBase = base;
+    transportation = base.toUpperCase();
+    console.log(currentDestination);
+    getDirections(currentDestination);
+    _.each($scope.sitesResults,function(result,element){
+       var placeLoc = result.geometry.location;
+      var placeLng = placeLoc.lng();
+      var placeLat = placeLoc.lat();
+      var destination = {lat:placeLat,lng:placeLng};
+      getDistanceandDuration(destination,element);     
+    });
+
+
+  };
   $scope.changeLocation = function(locationData) {
     geocoder = new google.maps.Geocoder();  // init Geocoder
 
@@ -219,19 +269,7 @@ console.log('hello homepage')
     //THIS STARTS THE INPUT NECESSARY TO FIND THE DISTANCE!
     var destination = {lat:placeLat,lng:placeLng};
     var origin = $scope.userPosition;
-    var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins : [origin],
-      destinations : [destination],
-      travelMode: google.maps.TravelMode.DRIVING
-    },DistanceMatrixServiceCallback)
-    function DistanceMatrixServiceCallback(response,status){
-      $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
-      $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
-    } 
-
-
-
+    getDistanceandDuration(destination,element)
     if (place.opening_hours && place.opening_hours.open_now) {  // not all Places have opening_hours property, will error on variable assign if they don't
       placeOpenNow = 'Open to play right now!';
       placeOpenNowClass = 'open';
@@ -256,19 +294,8 @@ console.log('hello homepage')
     marker.addListener('click', function() { // add event listener for each marker
       $('*[data-placeId] .sitename').css("font-weight", "normal");  // make text for list item bold
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
-      var directionsService = new google.maps.DirectionsService;
-      directionsService.route({
-        origin: $scope.userPosition,
-        destination: destination,
-        travelMode: google.maps.TravelMode.DRIVING
-
-      },function(response,status){
-         if (status === google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response)
-        }else {
-          console.log("Direction request failed")
-        }
-      })
+      currentDestination = destination;
+      getDirections(destination);
       infowindow.setContent('<div class="infowindow-name">' + placeName + '</div><div class="infowindow-open ' + placeOpenNowClass + '">' + placeOpenNow + '</div><div class="infowindow-vicinity">' + placeVicinity + '</div');
       infowindow.open($scope.map, this);  // infowindow popup
 
