@@ -23,7 +23,7 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.TransportationCategory= {
     "Driving": "car",
     "Walking": "male",
-    "Bicyling":"bicycle",
+    "Bicycling":"bicycle",
     "Transit":"bus"
   }
   $scope.sports = {
@@ -65,6 +65,26 @@ angular.module('myApp.home', ['ngRoute'])
   var geocoder;
   var userMarker;
   var searchLocation;
+  var currentDestination;
+
+//DIRECTIONS AND DISTANCE FUNCTIONS
+
+  function getDirections(destination){
+    var directionsService = new google.maps.DirectionsService;
+    directionsService.route({
+      origin: $scope.userPosition,
+      destination: destination,
+      travelMode: google.maps.TravelMode[transportation]
+
+    },function(response,status){
+       if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response)
+      }else {
+        console.log("Direction request failed")
+      }
+    })
+  }
+
 
 
 // CHANGE USER'S LOCATION
@@ -72,6 +92,8 @@ angular.module('myApp.home', ['ngRoute'])
     $scope.SelectedIcon = icon;
     $scope.SelectedBase = base;
     transportation = base.toUpperCase();
+    console.log(currentDestination);
+    getDirections(currentDestination);
 
   };
   $scope.changeLocation = function(locationData) {
@@ -222,19 +244,8 @@ angular.module('myApp.home', ['ngRoute'])
     marker.addListener('click', function() { // add event listener for each marker
       $('*[data-placeId] .sitename').css("font-weight", "normal");  // make text for list item bold
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
-      var directionsService = new google.maps.DirectionsService;
-      directionsService.route({
-        origin: $scope.userPosition,
-        destination: destination,
-        travelMode: google.maps.TravelMode[transportation]
-
-      },function(response,status){
-         if (status === google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response)
-        }else {
-          console.log("Direction request failed")
-        }
-      })
+      currentDestination = destination;
+      getDirections(destination);
       infowindow.setContent('<div class="infowindow-name">' + placeName + '</div><div class="infowindow-open ' + placeOpenNowClass + '">' + placeOpenNow + '</div><div class="infowindow-vicinity">' + placeVicinity + '</div');
       infowindow.open($scope.map, this);  // infowindow popup
 
