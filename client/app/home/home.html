@@ -90,6 +90,7 @@
     </div>
 
   </div>
+  <div id="direction-display"></div>
 </div>
 
 
@@ -99,12 +100,13 @@
 <script>
   function initMap() {
     var scope = $('#map').scope();
+    var scope2 = $('#direction-display').scope();
     scope.userfind();
-    scope.directionDisplay();
+    scope2.directionDisplay();
     google.maps.event.addDomListener(window, 'load', initialize);
-
-
   }
+
+
 
   // Google Address Autocomplete
   function initialize() {
