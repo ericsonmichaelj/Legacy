@@ -178,12 +178,13 @@ console.log('hello homepage')
     function DistanceMatrixServiceCallback(response,status){
       console.log(response)
       $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
-      $scope.sitesResults[element].durationvalue = response.rows[0].elements[0].distance.value;
+      $scope.sitesResults[element].durationvalue = response.rows[0].elements[0].duration.value;
       $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
 
     } 
   }
-
+$scope.SelectedBase = "Driving"
+$scope.SelectedIcon= "car"
 //
 //SELECT FORM OF TRANSPORATION
   $scope.SelectTransportation = function(base,icon){
