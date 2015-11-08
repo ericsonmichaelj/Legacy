@@ -38,11 +38,13 @@ app.directive('ngEnter', function () {
     };
 });
 
-app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'EmailandPrint', function($scope, $log, $http, $mdDialog, socket, EmailandPrint) {
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'userObj', 'EmailandPrint'  function($scope, $log, $http, $mdDialog, socket, userObj, EmailandPrint) {
 
      $scope.messages = [];
      $scope.room = "default";
-     $scope.username = "sonny";
+    $scope.username = userObj.user;
+
+     // console.log('user',userObj)
  //server opens connection, when client connects, setup event is called, load rooms   
 socket.on('setup', function (data) {
         var sports = data.sports;
@@ -89,7 +91,7 @@ $scope.send = function(msg){
 }
  
 
-console.log('hello homepage')
+
 // $SCOPE VARIABLES
   $scope.displayEmailandPrint = EmailandPrint;
   $scope.map;

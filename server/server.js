@@ -11,6 +11,8 @@ var cookieParser = require('cookie-parser');  // parses cookies
 var uriUtil = require('mongodb-uri');  // util for Mongo URIs
 var http = require('http');
 var sockets = require('socket.io');
+var Q = require('q');  // promises library
+
 
 // SCHEMA / MODELS
 var User = require('./models/userModel.js');
@@ -82,7 +84,7 @@ app.use('callback', router);
 server.listen(port);
 console.log('Unbalanced magic is happening on port ' + port);
 
-//listen for the connection
+//listen for the connection -- SOCKETS.IO magic happens here
 io.on('connection', function(socket){
    console.log('why hello there, socket.io')
 
@@ -101,25 +103,54 @@ io.on('connection', function(socket){
     'Squash': 'Squash Court'
   };
 
-
-
   //emit the sports array on setup of connection
   socket.emit('setup', {sports: sports});
-
-
 
 socket.on('new message', function(data){
   console.log('new message received', data)
   io.sockets.emit('message created', data)
+
 })
+
+
+
+//listen for a new chat message & save it to db
+socket.on('new message', function(data){
+  console.log('server heard new message..', data)
+  var findUser = Q.nbind(User.findOne, User);
+  //check that user exists before saving the message
+  findUser({username:data.username})
+    .then(function(user){
+      if (!user){
+        next(new Error('user does not exist'))
+      } else {
+        //for this username, find the correspsomding ._id & push in msg
+        var update = Q.nbind(User.findByIdAndUpdate, User);
+
+        var newMsg = {
+          content: data.message,
+          room: data.room.toLowerCase(),
+          created: new Date()
+        };
+        update(user._id,
+          {$push: {"messages" : newMsg}})
+      }
+    }).then(function(user){
+      console.log('message saved for user: ', user)
+
+    });
+});
 
 });
 
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> updated schema, messages are now saved by server to db
 // DB TESTING - keep this! uncomment to test if db is connected
   // var userCreate = Q.nbind(User.create, User);
   // var newUser = {

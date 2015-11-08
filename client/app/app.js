@@ -20,7 +20,14 @@ angular.module('myApp', [
   
 }])
 
-.controller('mainController', ['$scope', '$cookies', function($scope, $cookies) {
+.factory("userObj",function(){
+  return {};
+})
+
+
+.controller('mainController', ['$scope', '$cookies',"userObj", function($scope, $cookies, userObj) {
+
+
 
 // COOKIES
 
@@ -39,6 +46,11 @@ angular.module('myApp', [
     
     $scope.user = user;
     $scope.fbCookie = true;
+
+    // $scope.userObj = userObj;
+    // $scope.userObj.username = user;
+    userObj.user = user.fbUserName
+
   }
 
 }]);
