@@ -38,7 +38,7 @@ app.directive('ngEnter', function () {
     };
 });
 
-app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'userObj', 'EmailandPrint'  function($scope, $log, $http, $mdDialog, socket, userObj, EmailandPrint) {
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'userObj', 'EmailandPrint',  function($scope, $log, $http, $mdDialog, socket, userObj, EmailandPrint) {
 
      $scope.messages = [];
      $scope.room = "";
