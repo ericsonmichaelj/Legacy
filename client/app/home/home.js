@@ -17,7 +17,7 @@ app.factory('socket', function (socketFactory) {
 });
 
 
-app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket',  function($scope, $log, $http, $mdDialog, socket) {
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'EmailandPrint', function($scope, $log, $http, $mdDialog, socket, EmailandPrint) {
 
      $scope.messages = [];
      $scope.room = "default";
@@ -49,7 +49,7 @@ $scope.send = function(msg){
 
 console.log('hello homepage')
 // $SCOPE VARIABLES
-  
+  $scope.displayEmailandPrint = EmailandPrint;
   $scope.map;
   $scope.userPosition;
   $scope.sitesResults;
@@ -107,7 +107,10 @@ console.log('hello homepage')
   var currentDestionationName;
 //DIRECTIONS AND DISTANCE FUNCTIONS
 
-  function getDirections(destination){
+  $scope.getDirections = function(destination){
+    EmailandPrint.truth = true;
+    console.log(EmailandPrint.truth)
+    console.log($scope.displayEmailandPrint.truth);
     var directionsService = new google.maps.DirectionsService;
     directionsService.route({
       origin: $scope.userPosition,
@@ -142,7 +145,7 @@ console.log('hello homepage')
     $scope.SelectedBase = base;
     transportation = base.toUpperCase();
     if(currentDestination){
-      getDirections(currentDestination);
+      $scope.getDirections(currentDestination);
       _.each($scope.sitesResults,function(result,element){
          var placeLoc = result.geometry.location;
         var placeLng = placeLoc.lng();
@@ -171,6 +174,7 @@ $scope.sendEmail = function(){
     url: "/send",
     data: sendemaildata
   })
+  $("#emailModal").modal('toggle');
 }
 
 
@@ -318,7 +322,9 @@ $scope.sendEmail = function(){
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
       currentDestination = destination;
       currentDestionationName = placeName;
-      getDirections(destination);
+      EmailandPrint.truth = true;
+      $scope.getDirections(destination);
+      $scope.$apply();
       infowindow.setContent('<div class="infowindow-name">' + placeName + '</div><div class="infowindow-open ' + placeOpenNowClass + '">' + placeOpenNow + '</div><div class="infowindow-vicinity">' + placeVicinity + '</div');
       infowindow.open($scope.map, this);  // infowindow popup
 
@@ -417,5 +423,11 @@ $scope.sendEmail = function(){
   };
 
 }]);
+
+app.factory("EmailandPrint",function(){
+  var displayEmailandPrint = {truth: false}
+  return displayEmailandPrint
+})
+
 
 }());

@@ -100,12 +100,13 @@
     </div>
 
   </div>
-  <i class="fa fa-print fa-2x" onClick="window.print()" >Print Directions</i>
-  <i class="fa fa-envelope fa-2x" ng-click="emailDirections()"> Email Directions</i>
-  <div id="direction-display" ></div>
+  <div ng-show="displayEmailandPrint.truth">
+    <i class="fa fa-print fa-2x" onClick="window.print()" >Print Directions</i>
 
+      <i class="fa fa-envelope fa-2x" ng-click="emailDirections()"> Email Directions</i>
+ 
 </div>
-
+    <div id="direction-display" ></div> 
 <!-- EMAIL Modal -->
 <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
