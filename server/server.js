@@ -107,8 +107,20 @@ io.on('connection', function(socket){
     socket.emit('setup', {sports: sports});
 
   socket.on('new message', function(data){
-    console.log('new message received', data)
-    io.sockets.emit('message created', data)
+    //the socket broadcast the received message,
+    //for immediate display by other connected clients
+    //however we must ensure that what we broadcast back
+    //has the exact same format as what the database query
+    //will return when it makes the db extraction
+    //i.e. this immediate broadcast signal must precisely match the format 
+    //we ultimately save messages into the DB
+    var obj ={}
+    obj.username = data.username;
+    obj.messages = {};
+    obj.messages.content = data.content;
+
+    console.log('new message received', obj)
+    io.sockets.emit('message created', obj)
 
   });
 
@@ -121,6 +133,8 @@ socket.on('switch channel',function(data){
   io.in(data.oldChannel).emit('user left', data);
   //emit a signal on the new channel
   io.in(data.newChannel).emit('user joined', data);
+
+
 
 });
 
@@ -137,7 +151,7 @@ socket.on('switch channel',function(data){
           var update = Q.nbind(User.findByIdAndUpdate, User);
 
           var newMsg = {
-            content: data.message,
+            content: data.content,
             room: data.room.toLowerCase(),
             created: new Date()
           };

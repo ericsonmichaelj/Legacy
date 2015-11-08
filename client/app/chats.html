@@ -12,12 +12,11 @@
                     <md-option ng-repeat="r in rooms" value="{{r}}">{{r}}</md-option>
                 </md-select>
                 <md-list>
-                          <md-list-item ng-repeat="m in messages" class="md-3-line">
+                          <md-list-item ng-repeat="m in messages.slice().reverse()" class="md-3-line">
                             <img ng-src="../assets/images/baseball.png" class="md-avatar" />
                             <div class="md-list-item-text">
-                              <h3>user: {{ m.username  }}</h3>
-                              <h4>room: {{ m.room }}</h4>
-                              <p>{{ m.message}}</p>
+                              <h3>{{m.username}}</h3>
+                              <p>{{ m.messages.content}}</p>
                             </div>
                           </md-list-item>
                          

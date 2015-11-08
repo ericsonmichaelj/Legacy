@@ -42,7 +42,7 @@ app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socke
 
      $scope.messages = [];
      $scope.room = "";
-    $scope.username = userObj.user;
+     $scope.username = userObj.user;
 
      // console.log('user',userObj)
  //server opens connection, when client connects, setup event is called, load rooms   
@@ -61,7 +61,9 @@ socket.on('setup', function (data) {
       });
 
 socket.on('message created', function (data){
- $scope.messages.unshift(data)
+    console.log('our message sent back to us',data)
+
+ $scope.messages.push(data)
 
 });
 
@@ -72,7 +74,6 @@ $scope.changeRoom = function(clickedRoom){
   socket.emit('switch channel', {
     newChannel: clickedRoom
     //set old channel?
-    
   });
   $http.get(serverBaseUrl + '/msg?room=' + clickedRoom).success(function(msgs){
     $scope.messages = msgs;
@@ -87,7 +88,7 @@ $scope.changeRoom = function(clickedRoom){
 $scope.send = function(msg){
  socket.emit('new message',{
    room: $scope.room,
-   message: msg,
+   content: msg,
    username: $scope.username
  });
 
