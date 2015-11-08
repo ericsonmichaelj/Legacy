@@ -38,7 +38,7 @@ app.directive('ngEnter', function () {
     };
 });
 
-app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket',  function($scope, $log, $http, $mdDialog, socket) {
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'EmailandPrint', function($scope, $log, $http, $mdDialog, socket, EmailandPrint) {
 
      $scope.messages = [];
      $scope.room = "default";
@@ -91,7 +91,7 @@ $scope.send = function(msg){
 
 console.log('hello homepage')
 // $SCOPE VARIABLES
-  
+  $scope.displayEmailandPrint = EmailandPrint;
   $scope.map;
   $scope.userPosition;
   $scope.sitesResults;
@@ -146,10 +146,13 @@ console.log('hello homepage')
   var userMarker;
   var searchLocation;
   var currentDestination;
-
+  var currentDestionationName;
 //DIRECTIONS AND DISTANCE FUNCTIONS
 
-  function getDirections(destination){
+  $scope.getDirections = function(destination){
+    EmailandPrint.truth = true;
+    console.log(EmailandPrint.truth)
+    console.log($scope.displayEmailandPrint.truth);
     var directionsService = new google.maps.DirectionsService;
     directionsService.route({
       origin: $scope.userPosition,
@@ -177,24 +180,47 @@ console.log('hello homepage')
     } 
   }
 
-
-// CHANGE USER'S LOCATION
+//
+//SELECT FORM OF TRANSPORATION
   $scope.SelectTransportation = function(base,icon){
     $scope.SelectedIcon = icon;
     $scope.SelectedBase = base;
     transportation = base.toUpperCase();
-    console.log(currentDestination);
-    getDirections(currentDestination);
-    _.each($scope.sitesResults,function(result,element){
-       var placeLoc = result.geometry.location;
-      var placeLng = placeLoc.lng();
-      var placeLat = placeLoc.lat();
-      var destination = {lat:placeLat,lng:placeLng};
-      getDistanceandDuration(destination,element);     
-    });
-
-
+    if(currentDestination){
+      $scope.getDirections(currentDestination);
+      _.each($scope.sitesResults,function(result,element){
+         var placeLoc = result.geometry.location;
+        var placeLng = placeLoc.lng();
+        var placeLat = placeLoc.lat();
+        var destination = {lat:placeLat,lng:placeLng};
+        getDistanceandDuration(destination,element);     
+      });
+    }
   };
+
+//EMAIL DIRECTIONS
+$scope.emailaddress;
+var sendemaildata = {};
+
+$scope.emailDirections = function(){
+  $('#emailModal').modal('toggle');
+}
+$scope.sendEmail = function(){
+  sendemaildata.subject = "Here are the directions to " + currentDestionationName;                            
+  sendemaildata.to = $scope.emailaddress;
+  sendemaildata.message = document.getElementById("direction-display").innerHTML
+  console.log(sendemaildata.message);
+  console.log(sendemaildata)
+  $http({
+    method: "POST",
+    url: "/send",
+    data: sendemaildata
+  })
+  $("#emailModal").modal('toggle');
+}
+
+
+// CHANGE USER'S LOCATION  
   $scope.changeLocation = function(locationData) {
     geocoder = new google.maps.Geocoder();  // init Geocoder
 
@@ -337,7 +363,10 @@ console.log('hello homepage')
       $('*[data-placeId] .sitename').css("font-weight", "normal");  // make text for list item bold
       $('*[data-placeId=' + place.place_id + '] .sitename').css("font-weight", "bold");
       currentDestination = destination;
-      getDirections(destination);
+      currentDestionationName = placeName;
+      EmailandPrint.truth = true;
+      $scope.getDirections(destination);
+      $scope.$apply();
       infowindow.setContent('<div class="infowindow-name">' + placeName + '</div><div class="infowindow-open ' + placeOpenNowClass + '">' + placeOpenNow + '</div><div class="infowindow-vicinity">' + placeVicinity + '</div');
       infowindow.open($scope.map, this);  // infowindow popup
 
@@ -436,5 +465,11 @@ console.log('hello homepage')
   };
 
 }]);
+
+app.factory("EmailandPrint",function(){
+  var displayEmailandPrint = {truth: false}
+  return displayEmailandPrint
+})
+
 
 }());

@@ -1,4 +1,6 @@
 
+
+
 <div id="home-page" >
 
   <nav class="navbar navbar-default map-navbar row site-selection">
@@ -52,7 +54,7 @@
   </nav>
 
 
-  <div class="row map-site">
+  <div class="row map-site" id="Gmap">
 
     <div class="col-xs-8" id="map">
     </div>
@@ -98,31 +100,68 @@
     </div>
 
   </div>
-  <div id="direction-display"></div>
+  <div ng-show="displayEmailandPrint.truth">
+    <i class="fa fa-print fa-2x" onClick="window.print()" >Print Directions</i>
+
+      <i class="fa fa-envelope fa-2x" ng-click="emailDirections()"> Email Directions</i>
+ 
+</div>
+    <div id="direction-display" ></div> 
+<!-- EMAIL Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Type in an e-mail address to send directions to</h4>
+      </div>
+      <div class="modal-body">
+       <div class="control-group">
+        <label class="control-label">Email address</label>
+          <input id="email" name="email" type="text" placeholder="name@example.com" class="input-xlarge" ng-model="emailaddress">
+         <button type="button" class="btn btn-primary" ng-click="sendEmail()">Send</button>     
+    </div>
+  
+    </div>
+
+    </div>
+  </div>
 </div>
 
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAW_CqI13ElUEXPwVb5jdrW8IewZewPG4&libraries=places&callback=initMap"></script>
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAW_CqI13ElUEXPwVb5jdrW8IewZewPG4&libraries=places&callback=initMap"></script>
+<script type ="text/javascript" src ="../assets/js/jquery.printElement.min.js"
 <script type="text/javascript" src="../bower_components/angular-socket-io/socket.js"></script>
 <script type="text/javascript" src="../bower_components/socket.io-client/socket.io.js"></script>
 
-<script>
+<style>
+  @media print {
+    body {
+      visibility: hidden;
+    }
+    #direction-display {
+      visibility: visible;
+    }
+  }
+</style>
 
+
+<script>
 
 //  var socket = io.connect('http://localhost:8080')
 // // socket.on('setup', function(data){
     
 // //     console.log('something')
 // //   })
-
+  // function printDirections(){
+  //   $('.direction-display').printElement();
+  // }
 
   function initMap() {
     var scope = $('#map').scope();
-    var scope2 = $('#direction-display').scope();
     scope.userfind();
     scope.directionDisplay();
-    scope2.directionDisplay2();
     google.maps.event.addDomListener(window, 'load', initialize);
   }
 
