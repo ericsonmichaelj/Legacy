@@ -41,7 +41,7 @@ app.directive('ngEnter', function () {
 app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'userObj', 'EmailandPrint'  function($scope, $log, $http, $mdDialog, socket, userObj, EmailandPrint) {
 
      $scope.messages = [];
-     $scope.room = "default";
+     $scope.room = "";
     $scope.username = userObj.user;
 
      // console.log('user',userObj)
@@ -57,6 +57,7 @@ socket.on('setup', function (data) {
         }
     
         $scope.rooms = roomsArray;
+        $scope.room = roomsArray[0]
       });
 
 socket.on('message created', function (data){
@@ -68,8 +69,10 @@ socket.on('message created', function (data){
 $scope.changeRoom = function(clickedRoom){
   $scope.room = clickedRoom.toUpperCase();
   //emit the switch room signal to the server with the clicked room
-  socket.emit('switch room', {
-    newRoom: clickedRoom
+  socket.emit('switch channel', {
+    newChannel: clickedRoom
+    //set old channel?
+    
   });
   $http.get(serverBaseUrl + '/msg?room=' + clickedRoom).success(function(msgs){
     $scope.messages = msgs;
@@ -77,6 +80,7 @@ $scope.changeRoom = function(clickedRoom){
 
 
 };
+
 
 
 //function to call when enter key hit, it emits a signal back to the server

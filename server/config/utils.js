@@ -42,6 +42,24 @@ exports.postUserInfo = function(userInfo) {  // post user info to our db
   userCreate(newUser);
 };
 
+//messages
+
+exports.getMsgs = function(req, res){
+  var reqChannel = req.query.room.toLowerCase()
+  console.log('they want channel: ', reqChannel)
+
+  var chats = Q.nbind(User.aggregate,User);
+  //find all chats in the specified room
+  chats([{$unwind: '$messages'}, 
+                    {$match: {"messages.room":reqChannel}},
+                    {$group: {_id:'$_id',username:{$first:'$username'},
+                    messages: {$push:'$messages'}}}])
+    .then(function(data){
+      console.log('sending client', data[0].messages)
+      res.send(data[0].messages)
+    })
+}
+
 
 // SITES
 exports.postSiteInfo = function(req, res) {  // interact with db to post site's info
