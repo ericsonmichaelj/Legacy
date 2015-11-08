@@ -172,11 +172,15 @@ console.log('hello homepage')
     service.getDistanceMatrix({
       origins : [$scope.userPosition],
       destinations : [destination],
+      unitSystem:  google.maps.UnitSystem.IMPERIAL,
       travelMode: google.maps.TravelMode[transportation]
     },DistanceMatrixServiceCallback)
     function DistanceMatrixServiceCallback(response,status){
+      console.log(response)
       $scope.sitesResults[element].distance = response.rows[0].elements[0].distance.text;
+      $scope.sitesResults[element].durationvalue = response.rows[0].elements[0].distance.value;
       $scope.sitesResults[element].duration =response.rows[0].elements[0].duration.text;
+
     } 
   }
 
@@ -209,8 +213,6 @@ $scope.sendEmail = function(){
   sendemaildata.subject = "Here are the directions to " + currentDestionationName;                            
   sendemaildata.to = $scope.emailaddress;
   sendemaildata.message = document.getElementById("direction-display").innerHTML
-  console.log(sendemaildata.message);
-  console.log(sendemaildata)
   $http({
     method: "POST",
     url: "/send",
