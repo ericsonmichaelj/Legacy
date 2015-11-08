@@ -132,9 +132,7 @@ socket.on('switch channel',function(data){
   //emit a leaving signal on the old channel
   io.in(data.oldChannel).emit('user left', data);
   //emit a signal on the new channel
-  io.in(data.newChannel).emit('user joined', data);
-
-
+  io.in(data.newChannel).emit('user joined',data);
 
 });
 

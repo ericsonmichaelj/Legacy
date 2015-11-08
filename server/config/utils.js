@@ -49,7 +49,7 @@ exports.getMsgs = function(req, res){
 
   //promisify an aggregation query
   var chats = Q.nbind(User.aggregate,User);
-  //find all chats in the specified room
+  //find all chats in the specified room, unwind at the end to flatten extraction
   chats([{$unwind: '$messages'}, 
                     {$match: {"messages.room":reqChannel}},
                     {$group: {_id:'$_id',username:{$first:'$username'},
@@ -57,7 +57,7 @@ exports.getMsgs = function(req, res){
                     {$unwind: '$messages'}])
     .then(function(data){
       //send back the client, messages array returned from above query
-      console.log('sending the client',data)
+      //console.log('sending the client',data)
       res.send(data)
     })
 }
