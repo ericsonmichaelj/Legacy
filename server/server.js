@@ -167,11 +167,7 @@ socket.on('switch channel',function(data){
 
 
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> updated schema, messages are now saved by server to db
 // DB TESTING - keep this! uncomment to test if db is connected
   // var userCreate = Q.nbind(User.create, User);
   // var newUser = {
