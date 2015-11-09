@@ -442,7 +442,7 @@ $scope.sendEmail = function(){
     });
 
     markers = []; // clear markers array
-    $scope.sitesResults = []; // clear site list
+    //$scope.sitesResults = []; // clear site list
 
     var service = new google.maps.places.PlacesService($scope.map);  // init service
     service.nearbySearch(request, nearbySearchCallback);  // perform the search with given parameters
