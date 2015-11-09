@@ -8,4 +8,42 @@
     width: 100%;
 }
 
+.streetview img{
+	width: 300px;
+	height: 150px;
+}
+.e-mail{
+	margin-right: 10px;
+} 
+
+#email{
+	width: 300px;
+	margin:0 10px;
+}
+
+.site_information{
+	margin-top: 5px;
+}
+
+.fa-print {
+	margin-right: 80px;
+}
+
+.sitename {
+	text-align: center;
+}
+
+.checkin-button {
+	margin-right: -13px;
+}
+
+#home-page .map-site .list-group ul li .distance{
+	padding-left: 0px;
+	padding-right: 5px;
+}
+
+.e-mail {
+	position: relative;
+	right: -23px;
+}
 
