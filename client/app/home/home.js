@@ -286,9 +286,6 @@ $scope.sendEmail = function(){
     directionsDisplay.setPanel(document.getElementById("direction-display"));
   }
 
-  $scope.directionDisplay2 = function(){   
-    directionsDisplay.setPanel(document.getElementById("direction-display"));
-  }
 // GEOLOCATE USER'S POSITION
   $scope.userfind = function() {
     getMap(defaultLocation, 12);  // draw map with default location
