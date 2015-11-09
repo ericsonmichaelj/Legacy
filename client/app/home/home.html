@@ -42,7 +42,9 @@
              <i class="fa fa-{{SelectedIcon}}"></i>  {{SelectedBase}}
             </a>
           </li>
+
         </ul>
+
         <form name="change-location" class="navbar-form navbar-right address-selection" role="search" ng-submit="changeLocation(locationData)">
           <div class="form-group">
             <input id="location-search" type="text" class="form-control" placeholder="Change location..." ng-model="locationData" >
@@ -52,6 +54,22 @@
       </div>
     </div>
   </nav>
+<form class="form-inline">
+    <div class="checkbox selected-sport">
+    Search by
+    </div>
+  <div class="checkbox selected-sport">
+    <label>
+      <input type="radio" name="action" ng-model = "value" value="current" ng-checked="true" ng-change="checkedLocation(value)" > Current Location
+    </label>
+  </div>
+  <div class="checkbox selected-sport">
+    <label>
+      <input type="radio" ng-model="value" value="search" name="action" ng-change="checkedLocation(value)"> Searched Location
+    </label>
+  </div>
+
+</form>
 
 
   <div class="row map-site" id="Gmap">

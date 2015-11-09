@@ -39,11 +39,22 @@
 
 #home-page .map-site .list-group ul li .distance{
 	padding-left: 0px;
-	padding-right: 5px;
+	padding-right: 8px;
 }
 
 .e-mail {
 	position: relative;
 	right: -23px;
+}
+
+.checkbox.selected-sport{
+	font-size:20px;
+	margin-right:20px;
+}
+
+input[type=radio] {
+    width: 15px;
+    height: 15px;
+
 }
 
