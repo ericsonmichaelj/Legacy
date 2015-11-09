@@ -38,11 +38,13 @@ app.directive('ngEnter', function () {
     };
 });
 
-app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'EmailandPrint', function($scope, $log, $http, $mdDialog, socket, EmailandPrint) {
+app.controller('homeController', ['$scope', '$log', '$http', '$mdDialog', 'socket', 'userObj', 'EmailandPrint',  function($scope, $log, $http, $mdDialog, socket, userObj, EmailandPrint) {
 
      $scope.messages = [];
-     $scope.room = "default";
-     $scope.username = "sonny";
+     $scope.room = "";
+     $scope.username = userObj.user;
+
+     // console.log('user',userObj)
  //server opens connection, when client connects, setup event is called, load rooms   
 socket.on('setup', function (data) {
         var sports = data.sports;
@@ -55,10 +57,13 @@ socket.on('setup', function (data) {
         }
     
         $scope.rooms = roomsArray;
+        $scope.room = roomsArray[0]
       });
 
 socket.on('message created', function (data){
- $scope.messages.unshift(data)
+    console.log('our message sent back to us',data)
+
+ $scope.messages.push(data)
 
 });
 
@@ -66,8 +71,9 @@ socket.on('message created', function (data){
 $scope.changeRoom = function(clickedRoom){
   $scope.room = clickedRoom.toUpperCase();
   //emit the switch room signal to the server with the clicked room
-  socket.emit('switch room', {
-    newRoom: clickedRoom
+  socket.emit('switch channel', {
+    newChannel: clickedRoom
+    //set old channel?
   });
   $http.get(serverBaseUrl + '/msg?room=' + clickedRoom).success(function(msgs){
     $scope.messages = msgs;
@@ -77,11 +83,12 @@ $scope.changeRoom = function(clickedRoom){
 };
 
 
+
 //function to call when enter key hit, it emits a signal back to the server
 $scope.send = function(msg){
  socket.emit('new message',{
    room: $scope.room,
-   message: msg,
+   content: msg,
    username: $scope.username
  });
 
@@ -89,7 +96,7 @@ $scope.send = function(msg){
 }
  
 
-console.log('hello homepage')
+
 // $SCOPE VARIABLES
   $scope.displayEmailandPrint = EmailandPrint;
   $scope.map;

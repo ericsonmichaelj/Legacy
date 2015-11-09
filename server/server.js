@@ -11,6 +11,8 @@ var cookieParser = require('cookie-parser');  // parses cookies
 var uriUtil = require('mongodb-uri');  // util for Mongo URIs
 var http = require('http');
 var sockets = require('socket.io');
+var Q = require('q');  // promises library
+
 
 // SCHEMA / MODELS
 var User = require('./models/userModel.js');
@@ -82,39 +84,85 @@ app.use('callback', router);
 server.listen(port);
 console.log('Unbalanced magic is happening on port ' + port);
 
-//listen for the connection
+//listen for the connection -- SOCKETS.IO magic happens here
 io.on('connection', function(socket){
-   console.log('why hello there, socket.io')
+     console.log('why hello there, socket.io')
 
-  var defaultSport = 'general';
+    var defaultSport = 'general';
 
-  var sports = {
-    'Basketball': 'Basketball Court',
-    'Soccer': 'Soccer Field',
-    'Tennis': 'Tennis Court',
-    'Baseball': 'Baseball Field',
-    'Softball': 'Softball Field',
-    'Gym': 'Gym',
-    'Rock-Climbing': 'Climbing Gym',
-    'Golf': 'Golf Course',
-    'Racquetball': 'Racquetball Court',
-    'Squash': 'Squash Court'
-  };
+    var sports = {
+      'Basketball': 'Basketball Court',
+      'Soccer': 'Soccer Field',
+      'Tennis': 'Tennis Court',
+      'Baseball': 'Baseball Field',
+      'Softball': 'Softball Field',
+      'Gym': 'Gym',
+      'Rock-Climbing': 'Climbing Gym',
+      'Golf': 'Golf Course',
+      'Racquetball': 'Racquetball Court',
+      'Squash': 'Squash Court'
+    };
 
+    //emit the sports array on setup of connection
+    socket.emit('setup', {sports: sports});
 
+  socket.on('new message', function(data){
+    //the socket broadcast the received message,
+    //for immediate display by other connected clients
+    //however we must ensure that what we broadcast back
+    //has the exact same format as what the database query
+    //will return when it makes the db extraction
+    //i.e. this immediate broadcast signal must precisely match the format 
+    //we ultimately save messages into the DB
+    var obj ={}
+    obj.username = data.username;
+    obj.messages = {};
+    obj.messages.content = data.content;
 
-  //emit the sports array on setup of connection
-  socket.emit('setup', {sports: sports});
+    console.log('new message received', obj)
+    io.sockets.emit('message created', obj)
 
+  });
 
-
-socket.on('new message', function(data){
-  console.log('new message received', data)
-  io.sockets.emit('message created', data)
-})
+//when a user changes sport, server needs to know, this is switching channels/rooms
+socket.on('switch channel',function(data){
+  //handle both joining the new channel and leaving the old channel
+  socket.leave(data.oldChannel);
+  socket.join(data.newChannel);
+  //emit a leaving signal on the old channel
+  io.in(data.oldChannel).emit('user left', data);
+  //emit a signal on the new channel
+  io.in(data.newChannel).emit('user joined',data);
 
 });
 
+  //listen for a new chat message & save it to db
+  socket.on('new message', function(data){
+    var findUser = Q.nbind(User.findOne, User);
+    //check that user exists before saving the message
+    findUser({username:data.username})
+      .then(function(user){
+        if (!user){
+          next(new Error('user does not exist'))
+        } else {
+          //for this username, find the correspsomding ._id & push in msg
+          var update = Q.nbind(User.findByIdAndUpdate, User);
+
+          var newMsg = {
+            content: data.content,
+            room: data.room.toLowerCase(),
+            created: new Date()
+          };
+          update(user._id,
+            {$push: {"messages" : newMsg}})
+        }
+      }).then(function(user){
+        console.log('message saved :)')
+
+      });
+  });
+
+});
 
 
 

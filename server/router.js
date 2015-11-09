@@ -47,6 +47,7 @@ router.post('/send', function(req, res) {
     }
   });
 });
+router.get('/msg', utils.getMsgs);
 
 
 
